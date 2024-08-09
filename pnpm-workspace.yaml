@@ -1,0 +1,6 @@
+packages:
+  - "serverless/packages/*"
+  - "serverless/functions/**"
+  - "tools/changelog-formatter"
+  - "frontend/packages/*"
+  - "frontend/apps/**"

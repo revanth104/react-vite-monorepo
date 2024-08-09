@@ -1,0 +1,29 @@
+{
+  "name": "@cloudifybiz/changelog-formatter",
+  "version": "1.2.2",
+  "description": "Custom changelog formatter for PM apps",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "bin": {
+    "hello": "./lib/discord/hello.js"
+  },
+  "scripts": {
+    "merge-files": "node ./lib/discord/mergeFiles.js",
+    "send-to-discord": "node ./lib/discord/sendToDiscord.js",
+    "build": "tsc",
+    "build:watch": "tsc -watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@changesets/types": "^6.0.0",
+    "@types/node": "^20.10.7",
+    "@types/unzipper": "^0.10.9"
+  },
+  "dependencies": {
+    "axios": ">=1.6.0",
+    "dotenv": "^16.4.5",
+    "extract-zip": "^2.0.1"
+  }
+}

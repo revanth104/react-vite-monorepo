@@ -1,0 +1,37 @@
+{
+  "name": "pm-app-cli",
+  "version": "1.0.0",
+  "description": "Partner marketplace apps cli",
+  "exports": "./index.js",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "build": "tsc && shx cp -r src dist && shx rm -rf dist/index.ts && shx rm -rf dist/src"
+  },
+  "bin": {
+    "pmapps": "./dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/inquirer": "^9.0.7",
+    "@types/node": "^20.10.6",
+    "@types/shelljs": "^0.8.15",
+    "nodemon": "^3.0.3",
+    "shx": "^0.3.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "ejs": "^3.1.9",
+    "inquirer": "^9.2.12",
+    "shelljs": "^0.8.5"
+  },
+  "engines": {
+    "node": ">=14.16"
+  }
+}

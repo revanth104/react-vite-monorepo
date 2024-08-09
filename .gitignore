@@ -1,0 +1,14 @@
+node_modules
+lib
+dist
+.nx
+.npmrc
+*.log
+.nx/cache
+.nx/workspace-data
+.env
+!frontend/apps/**/*.env
+# Local Netlify folder
+.netlify
+gitOwners.env
+changesetOutput.json
