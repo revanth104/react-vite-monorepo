@@ -3,6 +3,7 @@ name: Deploy to Netlify
 on:
   push:
     branches:
+      - main
       - "feature/*"
     paths:
       - "frontend/**" # Trigger on changes within frontend directories
