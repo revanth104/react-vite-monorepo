@@ -1,0 +1,14 @@
+{
+  "name": "hubspot-cvr-frontend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "targets": {
+    "deploy-to-netlify": {
+      "options": {
+        "env": {
+          "NETLIFY_SITE_ID": "d27cead2-4030-44a3-9143-bf5d5037297c"
+        }
+      }
+    }
+  },
+  "tags": ["netlify", "site"]
+}
