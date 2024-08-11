@@ -1,20 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./App.scss";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import { useDispatch } from "react-redux";
-import { fetchCmsData } from "@cloudify/cms";
-import { NoSearchResultsFound } from "@cloudify/cvr-frontend";
+import NavBarPage from "./pages/NavBarPage";
 
 function App() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchCmsData());
-  }, []);
   return (
-    <>
-      <NoSearchResultsFound />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/setup" element={<NavBarPage />} />
+      </Routes>
+    </Router>
   );
 }
 

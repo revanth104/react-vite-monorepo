@@ -1,4 +1,5 @@
 import "./styles.scss";
+import "quill/dist/quill.snow.css";
 
 import { CmsEditAndSave } from "./components/CmsEditAndSave";
 import { CmsRichText } from "./components/CmsRichText";

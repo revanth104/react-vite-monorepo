@@ -6,7 +6,7 @@ import { ICmsData } from "../types/cmsTypes.js";
 
 const initialState: ICmsData = {
   cmsData: {
-    loading: false,
+    loading: true,
     data: {
       allowedUsers: [],
       cmsContent: {},
@@ -65,7 +65,7 @@ export const cmsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCmsData.pending, (state, action) => {
-      if (!state.cmsData.loading) {
+      if (state.cmsData.loading) {
         state.cmsData.loading = true;
         state.cmsData.currentRequestId = action.meta.requestId;
       }

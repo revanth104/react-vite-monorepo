@@ -94,10 +94,20 @@ const SearchWindowTable = (props: IProps) => {
     try {
       setStoredId(el["_id"] as string);
       setLoading(true);
-
+      let cvrNumbers = [];
+      if (path === "/query-search" || path === "/global-search") {
+        cvrNumbers = [el["_source"]?.Vrvirksomhed?.cvrNummer];
+      } else {
+        cvrNumbers = [
+          {
+            cvrNumber: el["_source"]?.Vrvirksomhed?.cvrNummer,
+            objectId: userIds.objectId,
+          },
+        ];
+      }
       const body = {
         ...userIds,
-        cvrNumbers: [el["_source"]?.Vrvirksomhed?.cvrNummer],
+        cvrNumbers,
         queries:
           path === "/query-search" && searchQuery ? searchQuery().queries : [],
       };
@@ -314,13 +324,17 @@ const SearchWindowTable = (props: IProps) => {
       {path !== "/searchwindow" && (
         <div
           className={`mb-4 d-flex flex-row align-items-center ${
-            selectedCompanies.length >= 1 && "justify-content-between"
+            selectedCompanies.length >= 1 && "justify-content-between flex-wrap"
           }`}
         >
           {path !== "/searchwindow" &&
             companiesData &&
             companiesData.length > 0 && (
-              <div className="d-flex flex-row align-items-center">
+              <div
+                className={`d-flex flex-row align-items-center mb-3 ${
+                  selectedCompanies.length >= 1 && "flex-wrap"
+                }`}
+              >
                 <div className="mapping-search">
                   <input
                     type="search"
@@ -350,7 +364,7 @@ const SearchWindowTable = (props: IProps) => {
 
           {selectedCompanies.length >= 1 && (
             <Button
-              className="bulk-update-button"
+              className="bulk-update-button mb-3"
               onClick={() => onShowBulkCreateModal()}
               style={{ height: "40px" }}
             >

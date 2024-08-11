@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import { Modal, Button, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -37,8 +36,8 @@ interface IProps {
   settingIntervals: () => void;
   delayTime: string | number;
   delayTimeCalculation: (records: number) => number;
-  intervalId: any;
-  timeIntervalId: any;
+  intervalId: React.MutableRefObject<NodeJS.Timeout | undefined>;
+  timeIntervalId: React.MutableRefObject<NodeJS.Timeout | undefined>;
   userIds: {
     [key: string]: string | number;
   };
@@ -78,8 +77,8 @@ const CompanyList = (props: IProps) => {
 
   const onHandleCloseModal = () => {
     dispatch(setShowBulkFeatureModal({ showModal: false }));
-    timeIntervalId.current = null;
-    intervalId.current = null;
+    timeIntervalId.current = undefined;
+    intervalId.current = undefined;
   };
 
   /**
@@ -95,34 +94,23 @@ const CompanyList = (props: IProps) => {
     return subscriptionData;
   };
 
-  const getUrl = () => {
-    let url = "";
-    if (path === "/bulkupdate") {
-      url = "VITE_BULK_UPDATE_TRIGGER";
-    } else {
-      url = "VITE_BULK_CREATE_TRIGGER";
-    }
-
-    return url;
-  };
-
   const getCompanies = () => {
     if (path === "/bulkupdate" && bulkUpdateSelectedCompanies) {
-      const selectedCompanies = bulkUpdateSelectedCompanies
-        .map((company: ICompanies) => {
-          if (company && company.properties && cvrNumberKey) {
-            return {
-              id: company.id,
-              properties: {
-                [cvrNumberKey]: company.properties[cvrNumberKey],
-              },
-            };
-          }
-        })
-        .filter(Boolean) as ICompanies[];
+      const selectedCompanies = bulkUpdateSelectedCompanies.map(
+        (company: ICompanies) => {
+          return {
+            objectId: company.id,
+            cvrNumber: company?.properties?.[cvrNumberKey as string],
+          };
+        }
+      );
       return selectedCompanies;
     } else if (searchSelectedCompanies) {
-      return searchSelectedCompanies;
+      const companiesCvrNumbers: number[] = [];
+      searchSelectedCompanies.map((company) =>
+        companiesCvrNumbers.push(company.cvrNumber)
+      );
+      return companiesCvrNumbers;
     }
     return [] as ICompanies[] | ISelectedCompanies[];
   };
@@ -141,16 +129,17 @@ const CompanyList = (props: IProps) => {
       };
       dispatch(setBulkFeatureStats({ bulkStatsKey, stats }));
 
-      const filteredCompanies: ICompanies[] | ISelectedCompanies[] =
+      const filteredCompanies: ICompanies[] | ISelectedCompanies[] | number[] =
         getCompanies();
-      console.log(filteredCompanies);
+
       let postBody = {};
       const path = window.location.pathname;
       if (path === "/bulkupdate") {
         postBody = {
           ...userIds,
-          filteredCompanies,
+          selectedSearchResults: filteredCompanies,
           cvrNumberKey,
+          trigger: "bulkUpdate",
         };
       } else {
         postBody = {
@@ -160,6 +149,7 @@ const CompanyList = (props: IProps) => {
             path === "/query-search" && searchQuery
               ? searchQuery().queries
               : [],
+          trigger: "bulkCreate",
         };
       }
       const subscription = await fetchSubscriptionDetails();
@@ -184,11 +174,13 @@ const CompanyList = (props: IProps) => {
       ) {
         setShowLink(true);
         throw new Error(
-          "Credits are not sufficient to perform Bulk update in this Trial plan. Please upgrade to premium to continue using this feature."
+          `Credits are not sufficient to perform Bulk ${
+            path === "/bulkupdate" ? "Update" : "Create"
+          } in this Trial plan. Please upgrade to premium to continue using this feature.`
         );
       }
 
-      await axios.post(getUrlInCvr(getUrl()), {
+      await axios.post(getUrlInCvr("VITE_BULK_CREATE_TRIGGER"), {
         ...postBody,
       });
 

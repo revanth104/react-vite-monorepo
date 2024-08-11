@@ -4,6 +4,7 @@ import {
   setShowSuccessModal,
   setShowErrorModal,
 } from "../slice/preferenceSlice";
+import { setIsMappingsSaved } from "../slice/cvrMappingSlice";
 
 import { IFields } from "../types/cvrMappingTypes";
 
@@ -58,6 +59,7 @@ export const saveMappings = async (props: ISaveMappingsProps) => {
       ...userIds,
       createContacts: contactCreation,
     });
+    dispatch(setIsMappingsSaved());
     dispatch(setShowSuccessModal({ message: "Mappings Saved Successfully" }));
   } catch (error) {
     console.log(error);
