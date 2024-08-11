@@ -66,10 +66,10 @@ jobs:
         run: pnpm --filter "./frontend/packages/*" install --no-frozen-lockfile
 
       # Build affected packages
-      - name: Build packages
-        run: |
-          echo "github branch: ${{ github.ref }}"
-          pnpm nx run-many -t build --exclude=*,!frontend/packages/* --verbose
+      # - name: Build packages
+      #   run: |
+      #     echo "github branch: ${{ github.ref }}"
+      #     pnpm nx run-many -t build --exclude=*,!frontend/packages/* --verbose
 
       - name: Install Netlify CLI
         run: pnpm add -D netlify-cli -w
