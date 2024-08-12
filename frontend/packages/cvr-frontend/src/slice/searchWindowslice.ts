@@ -418,6 +418,8 @@ export const searchWindowSlice: Slice<ISearchWindowSlice> = createSlice({
           };
         }
         state.financialData.financial = data;
+      } else {
+        state.financialData.financial = {};
       }
     });
     builder.addCase(fetchFinancialData.rejected, (state, action) => {

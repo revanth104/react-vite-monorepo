@@ -24,6 +24,7 @@ import {
   handleSelectAll,
   onSelectCompany,
   setValuesToDefault,
+  fetchFinancialData,
 } from "../slice/searchWindowslice";
 
 import Pagination from "./Pagination";
@@ -130,6 +131,10 @@ const SearchWindowTable = (props: IProps) => {
       }
 
       dispatch(setValuesToDefault(""));
+      if (path === "/searchwindow") {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        dispatch(fetchFinancialData({ userIds }) as any);
+      }
     } catch (error) {
       console.log(error);
       let errorMessage;
