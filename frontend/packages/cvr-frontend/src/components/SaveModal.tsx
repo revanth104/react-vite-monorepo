@@ -66,8 +66,8 @@ const SaveModal = () => {
       mappingKeys: mappingsKey,
     });
     setLoading(false);
-    dispatch(hideSaveModal());
-    dispatch(setIsMappingsSaved());
+    dispatch(hideSaveModal({}));
+    dispatch(setIsMappingsSaved({}));
   };
 
   const discardChanges = async () => {
@@ -79,8 +79,8 @@ const SaveModal = () => {
       }) as any
     );
     setDiscardBtnLoading(false);
-    dispatch(hideSaveModal());
-    dispatch(setIsMappingsSaved());
+    dispatch(hideSaveModal({}));
+    dispatch(setIsMappingsSaved({}));
   };
 
   const renderButtons = () => {
@@ -90,7 +90,7 @@ const SaveModal = () => {
           className="btn add-btn"
           onClick={() => {
             window.scrollTo(0, 380);
-            dispatch(hideSaveModal());
+            dispatch(hideSaveModal({}));
             dispatch(storeActiveKey({ activeKey: "companyMappings" }));
           }}
         >

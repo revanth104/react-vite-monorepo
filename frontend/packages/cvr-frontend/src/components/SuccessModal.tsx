@@ -27,14 +27,14 @@ const SuccessModal = (props: IProps) => {
     <div>
       <Modal
         className="my-modal d-flex flex-row justify-content-center"
-        onHide={() => dispatch(onHideSuccessModal())}
+        onHide={() => dispatch(onHideSuccessModal({}))}
         show={successMessage !== ""}
       >
         <div className="d-flex flex-column justify-content-center align-items-center">
           <div className="modal-msg-header">
             <div
               className="modal-check-box mx-auto"
-              onClick={() => dispatch(onHideSuccessModal())}
+              onClick={() => dispatch(onHideSuccessModal({}))}
             >
               <AiOutlineCheck className="modal-check-icon" />
             </div>

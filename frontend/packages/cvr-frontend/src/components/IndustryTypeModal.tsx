@@ -149,7 +149,7 @@ const IndustryTypeModal = (props: IProps) => {
       centered
       className="industry-type-modal"
       onHide={() => {
-        dispatch(setShowIndustryTypeModal());
+        dispatch(setShowIndustryTypeModal({}));
         dispatch(setExpanded({ expanded: [] }));
       }}
     >
@@ -184,7 +184,7 @@ const IndustryTypeModal = (props: IProps) => {
         <button
           className="industry-type-save-btn"
           onClick={() => {
-            dispatch(setShowIndustryTypeModal());
+            dispatch(setShowIndustryTypeModal({}));
             dispatch(setChecked({ checked: [] }));
             dispatch(setExpanded({ expanded: [] }));
             setKeyword("");
@@ -194,9 +194,9 @@ const IndustryTypeModal = (props: IProps) => {
         </button>
         <button
           onClick={() => {
-            dispatch(setShowIndustryTypeModal());
+            dispatch(setShowIndustryTypeModal({}));
             dispatch(setExpanded({ expanded: [] }));
-            dispatch(setSavedSelectedItems());
+            dispatch(setSavedSelectedItems({}));
             setKeyword("");
           }}
           className="industry-type-save-btn"

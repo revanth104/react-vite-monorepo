@@ -85,7 +85,7 @@ const EditMapping = (props: IProps) => {
           {!isCvrCheck && storedKey !== "CVR Number" && (
             <Button
               className={`cancel-button`}
-              onClick={() => dispatch(cancelMapping())}
+              onClick={() => dispatch(cancelMapping({}))}
             >
               Cancel
             </Button>

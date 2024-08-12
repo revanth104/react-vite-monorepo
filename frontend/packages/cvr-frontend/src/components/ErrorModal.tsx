@@ -37,13 +37,13 @@ const ErrorModal = (props: ErrorModalProps) => {
       <Modal
         className="my-modal d-flex flex-row justify-content-center"
         show={errorMessage.length > 0}
-        onHide={() => dispatch(onHideErrorModal())}
+        onHide={() => dispatch(onHideErrorModal({}))}
       >
         <div className="d-flex flex-column justify-content-center align-items-center">
           <div className="error-modal-header">
             <div
               className="modal-error-box mx-auto"
-              onClick={() => dispatch(onHideErrorModal())}
+              onClick={() => dispatch(onHideErrorModal({}))}
             >
               <ImCross className="modal-cross-icon" />
             </div>
