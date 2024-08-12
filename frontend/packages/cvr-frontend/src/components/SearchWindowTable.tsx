@@ -129,7 +129,7 @@ const SearchWindowTable = (props: IProps) => {
         );
       }
 
-      dispatch(setValuesToDefault());
+      dispatch(setValuesToDefault(""));
     } catch (error) {
       console.log(error);
       let errorMessage;
@@ -388,15 +388,9 @@ const SearchWindowTable = (props: IProps) => {
         <p>No search results found</p>
       ) : (
         <div
-          className={`search-table-container ${
-            path !== "/searchwindow" &&
-            companiesData &&
-            companiesData.length > 0
-              ? "pb-1"
-              : ""
-          }`}
+          className={`search-table-container pb-1`}
           style={{
-            background: `${path !== "/searchwindow" ? "#fff" : ""}`,
+            background: "#fff",
           }}
         >
           {(path === "/query-search" && companiesData.length > 0) ||
@@ -454,152 +448,150 @@ const SearchWindowTable = (props: IProps) => {
                   </tr>
                 </thead>
                 <tbody className="search-table-body">
-                  {(path === "/searchwindow"
-                    ? companiesData
-                    : slicedCompanies
-                  ).map((el: ICompaniesData | ICompanies, index: number) => (
-                    <tr key={index} className="row-12">
-                      {(path === "/global-search" ||
-                        path === "/query-search") && (
-                        <td className="col-1 py-3 ps-3">
-                          <input
-                            type="checkbox"
-                            id={String(el._id)}
-                            className="company-table-checkbox"
-                            checked={el.isChecked}
-                            onChange={(event) =>
-                              dispatch(
-                                onSelectCompany({
-                                  isChecked: event.target.checked,
-                                  id: el._id,
-                                  cvrNumber:
-                                    el?._source?.Vrvirksomhed.cvrNummer,
-                                  companyName:
-                                    el?._source?.Vrvirksomhed
-                                      ?.virksomhedMetadata?.nyesteNavn?.navn,
-                                })
-                              )
-                            }
-                          />
-                        </td>
-                      )}
+                  {slicedCompanies.map(
+                    (el: ICompaniesData | ICompanies, index: number) => (
+                      <tr key={index} className="row-12">
+                        {(path === "/global-search" ||
+                          path === "/query-search") && (
+                          <td className="col-1 py-3 ps-3">
+                            <input
+                              type="checkbox"
+                              id={String(el._id)}
+                              className="company-table-checkbox"
+                              checked={el.isChecked}
+                              onChange={(event) =>
+                                dispatch(
+                                  onSelectCompany({
+                                    isChecked: event.target.checked,
+                                    id: el._id,
+                                    cvrNumber:
+                                      el?._source?.Vrvirksomhed.cvrNummer,
+                                    companyName:
+                                      el?._source?.Vrvirksomhed
+                                        ?.virksomhedMetadata?.nyesteNavn?.navn,
+                                  })
+                                )
+                              }
+                            />
+                          </td>
+                        )}
 
-                      <td className="py-3 col-2">
-                        <div className="d-flex flex-row">
-                          <p
-                            className={`search-table-body-para my-auto ${
-                              path === "/searchwindow" ? "ps-3" : ""
-                            }`}
-                          >
-                            <span className="search-table-company-name">
-                              {
-                                el["_source"]?.Vrvirksomhed?.virksomhedMetadata
-                                  ?.nyesteNavn?.navn
-                              }
-                            </span>
-                            <br></br>
-                            <span>
-                              {
-                                el["_source"]?.Vrvirksomhed?.virksomhedMetadata
-                                  ?.nyesteBeliggenhedsadresse?.vejnavn
-                              }{" "}
-                              {
-                                el["_source"]?.Vrvirksomhed?.virksomhedMetadata
-                                  ?.nyesteBeliggenhedsadresse?.husnummerFra
-                              }
-                            </span>
-                            <br></br>
-                            <span>
-                              {
-                                el["_source"]?.Vrvirksomhed?.virksomhedMetadata
-                                  ?.nyesteBeliggenhedsadresse?.postnummer
-                              }{" "}
-                              {
-                                el["_source"]?.Vrvirksomhed?.virksomhedMetadata
-                                  ?.nyesteBeliggenhedsadresse?.postdistrikt
-                              }
-                            </span>
-                          </p>
-                        </div>
-                      </td>
-                      <td className="py-3 col-2">
-                        <p className="search-table-body-para text-center my-auto">
-                          {el["_source"]?.Vrvirksomhed?.cvrNummer}
-                        </p>
-                      </td>
-                      <td className="py-3 col-3">
-                        <p
-                          className="search-table-body-para text-center my-auto"
-                          style={{ wordBreak: "break-all" }}
-                        >
-                          {
-                            el["_source"]?.Vrvirksomhed?.virksomhedMetadata
-                              ?.sammensatStatus
-                          }
-                        </p>
-                      </td>
-                      {checked.length > 0 ? (
+                        <td className="py-3 col-2">
+                          <div className="d-flex flex-row">
+                            <p
+                              className={`search-table-body-para my-auto ${
+                                path === "/searchwindow" ? "ps-3" : ""
+                              }`}
+                            >
+                              <span className="search-table-company-name">
+                                {
+                                  el["_source"]?.Vrvirksomhed
+                                    ?.virksomhedMetadata?.nyesteNavn?.navn
+                                }
+                              </span>
+                              <br></br>
+                              <span>
+                                {
+                                  el["_source"]?.Vrvirksomhed
+                                    ?.virksomhedMetadata
+                                    ?.nyesteBeliggenhedsadresse?.vejnavn
+                                }{" "}
+                                {
+                                  el["_source"]?.Vrvirksomhed
+                                    ?.virksomhedMetadata
+                                    ?.nyesteBeliggenhedsadresse?.husnummerFra
+                                }
+                              </span>
+                              <br></br>
+                              <span>
+                                {
+                                  el["_source"]?.Vrvirksomhed
+                                    ?.virksomhedMetadata
+                                    ?.nyesteBeliggenhedsadresse?.postnummer
+                                }{" "}
+                                {
+                                  el["_source"]?.Vrvirksomhed
+                                    ?.virksomhedMetadata
+                                    ?.nyesteBeliggenhedsadresse?.postdistrikt
+                                }
+                              </span>
+                            </p>
+                          </div>
+                        </td>
                         <td className="py-3 col-2">
                           <p className="search-table-body-para text-center my-auto">
-                            {
-                              el["_source"]?.Vrvirksomhed?.virksomhedMetadata
-                                ?.nyesteHovedbranche?.branchekode
-                            }
+                            {el["_source"]?.Vrvirksomhed?.cvrNummer}
                           </p>
                         </td>
-                      ) : (
-                        <td className="py-3 col-2">
+                        <td className="py-3 col-3">
                           <p
                             className="search-table-body-para text-center my-auto"
                             style={{ wordBreak: "break-all" }}
                           >
                             {
                               el["_source"]?.Vrvirksomhed?.virksomhedMetadata
-                                ?.nyesteVirksomhedsform?.langBeskrivelse
+                                ?.sammensatStatus
                             }
                           </p>
                         </td>
-                      )}
+                        {checked.length > 0 ? (
+                          <td className="py-3 col-2">
+                            <p className="search-table-body-para text-center my-auto">
+                              {
+                                el["_source"]?.Vrvirksomhed?.virksomhedMetadata
+                                  ?.nyesteHovedbranche?.branchekode
+                              }
+                            </p>
+                          </td>
+                        ) : (
+                          <td className="py-3 col-2">
+                            <p
+                              className="search-table-body-para text-center my-auto"
+                              style={{ wordBreak: "break-all" }}
+                            >
+                              {
+                                el["_source"]?.Vrvirksomhed?.virksomhedMetadata
+                                  ?.nyesteVirksomhedsform?.langBeskrivelse
+                              }
+                            </p>
+                          </td>
+                        )}
 
-                      <td className="py-3 col-2">
-                        <Button
-                          onClick={() => addCompany(el)}
-                          className={`search-table-btn my-auto ${
-                            path === "/searchwindow" ? "mx-5" : "mx-2"
-                          }`}
-                          disabled={loading || selectedCompanies.length >= 1}
-                        >
-                          {loading && storedId === el["_id"] ? (
-                            <Spinner
-                              as="span"
-                              animation="border"
-                              size="sm"
-                              role="status"
-                              aria-hidden="true"
-                            />
-                          ) : (
-                            <span>
-                              {path === "/global-search" ||
-                              path === "/query-search"
-                                ? "create"
-                                : "add"}
-                            </span>
-                          )}
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
+                        <td className="py-3 col-2">
+                          <Button
+                            onClick={() => addCompany(el)}
+                            className={`search-table-btn my-auto ${
+                              path === "/searchwindow" ? "mx-5" : "mx-2"
+                            }`}
+                            disabled={loading || selectedCompanies.length >= 1}
+                          >
+                            {loading && storedId === el["_id"] ? (
+                              <Spinner
+                                as="span"
+                                animation="border"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                              />
+                            ) : (
+                              <span>
+                                {path === "/global-search" ||
+                                path === "/query-search"
+                                  ? "create"
+                                  : "add"}
+                              </span>
+                            )}
+                          </Button>
+                        </td>
+                      </tr>
+                    )
+                  )}
                 </tbody>
               </Table>
 
-              {path !== "/searchwindow" && (
-                <div className="mt-3">
-                  <Pagination
-                    paginationData={companiesData}
-                    itemsPerPage={10}
-                  />
-                </div>
-              )}
+              <div className="mt-3">
+                <Pagination paginationData={companiesData} itemsPerPage={10} />
+              </div>
             </>
           ) : (
             <>

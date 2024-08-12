@@ -16,6 +16,8 @@ import IndustryTypeModal from "./components/IndustryTypeModal";
 import Pagination from "./components/Pagination";
 import CompanyList from "./components/CompanyList";
 import NoSearchResultsFound from "./components/NoSearchResultsFound";
+import SetupGuide from "./components/SetupGuide";
+import SetupGuideHeader from "./components/SetupGuideHeader";
 
 import cvrMappingSlice, {
   fetchMappings,
@@ -104,4 +106,6 @@ export {
   clearDefaultValues,
   storeActiveKey,
   NoSearchResultsFound,
+  SetupGuide,
+  SetupGuideHeader,
 };

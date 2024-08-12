@@ -111,7 +111,7 @@ const NavBarPage = () => {
       const confirmation = searchParams.get("confirmation");
       if (code) {
         setLoading(true);
-        const { data: res } = await axios.get(getUrl("REACT_APP_INSTALL_URL"), {
+        const { data: res } = await axios.get(getUrl("VITE_INSTALL_URL"), {
           params: {
             code,
           },

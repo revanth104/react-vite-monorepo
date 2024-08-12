@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, Slice } from "@reduxjs/toolkit";
 
 import axios from "axios";
 import { getCmsUrl } from "../helpers/url.js";
@@ -32,7 +32,7 @@ export const fetchCmsData = createAsyncThunk("cms/fetchCmsData", async () => {
   }
 });
 
-export const cmsSlice = createSlice({
+export const cmsSlice: Slice<ICmsData> = createSlice({
   name: "cms",
   initialState,
   reducers: {

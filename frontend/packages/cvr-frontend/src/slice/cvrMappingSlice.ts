@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, Slice } from "@reduxjs/toolkit";
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { getUrlInCvr } from "../helpers/url";
 import { setShowErrorModal } from "./preferenceSlice";
@@ -97,7 +97,7 @@ export const fetchAppFields = createAsyncThunk(
   }
 );
 
-export const cvrMappingSlice = createSlice({
+export const cvrMappingSlice: Slice<ICvrMappingSlice> = createSlice({
   name: "cvrMapping",
   initialState,
   reducers: {

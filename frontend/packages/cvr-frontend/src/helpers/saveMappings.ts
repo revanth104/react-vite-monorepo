@@ -59,7 +59,7 @@ export const saveMappings = async (props: ISaveMappingsProps) => {
       ...userIds,
       createContacts: contactCreation,
     });
-    dispatch(setIsMappingsSaved());
+    dispatch(setIsMappingsSaved(false));
     dispatch(setShowSuccessModal({ message: "Mappings Saved Successfully" }));
   } catch (error) {
     console.log(error);

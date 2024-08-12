@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, Slice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import { getUrlInCvr } from "../helpers/url";
 
@@ -62,7 +62,7 @@ export const fetchSubscription = createAsyncThunk(
   }
 );
 
-export const preferenceSlice = createSlice({
+export const preferenceSlice: Slice<IPreferenceSlice> = createSlice({
   name: "preference",
   initialState,
   reducers: {

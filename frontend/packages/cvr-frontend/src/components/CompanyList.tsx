@@ -144,7 +144,7 @@ const CompanyList = (props: IProps) => {
       } else {
         postBody = {
           ...userIds,
-          selectedSearchResults: searchSelectedCompanies,
+          selectedSearchResults: filteredCompanies,
           queries:
             path === "/query-search" && searchQuery
               ? searchQuery().queries

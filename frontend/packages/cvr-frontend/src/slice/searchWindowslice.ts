@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, Slice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 
 import { getUrlInCvr } from "../helpers/url";
@@ -172,7 +172,7 @@ const convertNumbers = (value: string) => {
   return roundOffNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
 
-export const searchWindowSlice = createSlice({
+export const searchWindowSlice: Slice<ISearchWindowSlice> = createSlice({
   name: "searchWindow",
   initialState,
   reducers: {
