@@ -58,6 +58,16 @@ jobs:
           pnpm --filter "./tools/changelog-formatter" install --no-frozen-lockfile 
           pnpm --filter @cloudifybiz/changelog-formatter run build
 
+      - name: Discard version-only changelog entries
+        run: |
+          for file in $(git diff --name-only HEAD | grep 'CHANGELOG.md'); do
+            if git diff "$file" | grep -Eq '^\+\#\#\s+\d+\.\d+\.\d+$'; then
+              echo "Discarding $file with version-only change."
+              git restore --staged "$file"
+              git restore "$file"
+            fi
+          done
+
       # Create a pull request
       - name: Create release pull request
         id: changesets
