@@ -67,15 +67,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN }}
 
-      - name: Debug Pull Request URL
-        env:
-          PR_URL: ${{ steps.changesets.outputs.pull_request_url }}
-        run: echo "Pull Request URL: $PR_URL"
-
-
       # Clean up empty CHANGELOG.md files
       - name: Clean up empty CHANGELOG.md files
-        if: steps.changesets.outputs.pull_request_url != ''
+        if: always()
         run: |
           # Find all modified CHANGELOG.md files in the last commit
           for file in $(git diff --name-only HEAD^ HEAD | grep 'CHANGELOG.md'); do
