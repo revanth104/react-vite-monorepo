@@ -1,5 +1,13 @@
 # hubspot-frontend
 
+## 2.0.5
+
+### Patch Changes
+
+#### [rr31](https://github.com/revanth104) [`b1b0601`](https://github.com/revanth104/react-vite-monorepo/commit/b1b060191a9d7daaeddccda7567b7bb7c4559aa6)
+
+test
+
 ## 2.0.4
 
 ### Patch Changes
