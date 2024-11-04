@@ -1,0 +1,31 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "deploy-to-netlify": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bash ./scripts/deploy-to-netlify.sh {projectRoot} {args.STAGE} {args.UPDATE_ENV}"
+          }
+        ]
+      }
+    },
+    "deploy-sam": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bash ./scripts/build-sam.sh {projectRoot}"
+          },
+          {
+            "command": "cd {projectRoot} && cd .. && sam deploy --stack-name pm-$STACK_NAME-$STACK --no-confirm-changeset --no-fail-on-empty-changeset  --s3-bucket $ARTIFACTS_BUCKET  --capabilities CAPABILITY_IAM --region $AWS_REGION --parameter-overrides StageName=$STAGE_NAME Environment=$NODE_ENVIRONMENT DomainName=$DOMAIN_NAME"
+          }
+        ],
+        "color": true,
+        "parallel": false
+      }
+    }
+  },
+  "defaultBase": "main"
+}

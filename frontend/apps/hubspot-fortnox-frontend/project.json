@@ -1,0 +1,14 @@
+{
+  "name": "hubspot-fortnox-frontend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "targets": {
+    "deploy-to-netlify": {
+      "options": {
+        "env": {
+          "NETLIFY_SITE_ID": "08e58ad7-028a-4699-b814-6c97e1fe4e07"
+        }
+      }
+    }
+  },
+  "tags": ["netlify", "site"]
+}
