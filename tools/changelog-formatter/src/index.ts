@@ -32,6 +32,7 @@ const getDependencyReleaseLine = async (
 ) => {
   if (dependenciesUpdated.length === 0) return "";
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const changesetLinks = changesets.map(
     (changeset) =>
       `- Updated dependencies${
@@ -39,11 +40,13 @@ const getDependencyReleaseLine = async (
       }`
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const updatedDependenciesList = dependenciesUpdated.map(
     (dependency) => `  - ${dependency.name}@${dependency.newVersion}`
   );
 
-  return [...changesetLinks, ...updatedDependenciesList].join("\n");
+  // return [...changesetLinks, ...updatedDependenciesList].join("\n");
+  return "";
 };
 
 const sendToDiscord = () => {

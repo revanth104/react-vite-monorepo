@@ -1,0 +1,133 @@
+name: Create changeset version PR
+
+# Trigger the workflow on pull requests affecting specific paths
+on:
+  pull_request:
+    branches: [main]
+    types: [closed]
+    paths:
+      - ".changeset/**"
+
+permissions:
+  id-token: write
+  contents: write #Needed for changeset PR
+  pull-requests: write #Needed for changeset PR
+
+env:
+  ARTIFACT_FILE_NAME: "changesetOutput.json"
+  ARTIFACT_FILE_PATH: ".changeset"
+
+jobs:
+  # Job to check for changesets in the pull request
+  create-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Enable corepack
+        run: corepack enable
+        shell: bash
+
+      # Get pnpm store directory and set it in environment variables
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_ENV
+
+      # Setup pnpm cache using actions/cache
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      # Install project dependencies using pnpm
+      - name: Install Dependencies
+        run: |
+          pnpm c set recursive-install=false --location=project
+          pnpm install --no-frozen-lockfile
+
+      # Build the changelog formatter to be used with changeset version
+      - name: Build Changelog-formatter
+        run: |
+          pnpm --filter "./tools/changelog-formatter" install --no-frozen-lockfile 
+          pnpm --filter @cloudifybiz/changelog-formatter run build
+
+      # Create a pull request
+      - name: Create release pull request
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          commit: "version: release new version"
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN }}
+
+  upload-artifact:
+    # Don't execute if the PR is from changeset-release
+    if: github.event.pull_request.merged == true && !(startsWith(github.event.pull_request.head.ref, 'changeset-release/'))
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Enable corepack
+        run: corepack enable
+        shell: bash
+
+      # Get pnpm store directory and set it in environment variables
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_ENV
+
+      # Setup pnpm cache using actions/cache
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      # Install project dependencies using pnpm
+      - name: Install Dependencies
+        run: |
+          pnpm c set recursive-install=false --location=project
+          pnpm install --no-frozen-lockfile
+
+      - name: Check for changesets
+        id: check-changeset
+        run: pnpm changeset status
+        continue-on-error: true
+
+      - name: Build Changelog-formatter
+        if: steps.check-changeset.outcome == 'success'
+        run: |
+          pnpm --filter "./tools/changelog-formatter" install --no-frozen-lockfile
+          pnpm --filter @cloudifybiz/changelog-formatter run build
+
+      - name: Create changeset output file
+        if: steps.check-changeset.outcome == 'success'
+        run: |
+          pnpm changeset status --output="${{ env.ARTIFACT_FILE_PATH }}/${{ env.ARTIFACT_FILE_NAME }}"
+          pnpm changeset version
+          cd ./tools/changelog-formatter 
+          pnpm merge-files
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN }}
+
+      - name: Upload Artifact
+        if: steps.check-changeset.outcome == 'success'
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.ARTIFACT_FILE_NAME }}
+          path: "${{ env.ARTIFACT_FILE_PATH }}/${{ env.ARTIFACT_FILE_NAME }}"
