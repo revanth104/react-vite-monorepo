@@ -1,0 +1,84 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;600;700;800&display=swap");
+
+body {
+  font-family: "Lexend Deca" !important;
+}
+.install-flow-bg {
+  background-color: #f2f5f7 !important;
+  min-height: 100vh;
+}
+.connected-container {
+  border: 1px solid #0091ae;
+  border-radius: 5px;
+}
+.sync-rules-container {
+  background-color: #ffffff;
+  box-shadow: 0px 0px 4px 0px #a3a3a340;
+  border-radius: 5px;
+}
+details[open] summary ~ * {
+  animation: sweep 0.5s ease-in-out;
+}
+@keyframes sweep {
+  from {
+    opacity: 0;
+    margin-top: -10px;
+  }
+  to {
+    opacity: 1;
+    margin-top: 0px;
+  }
+}
+.form-check-input {
+  border: 1px solid #acacac !important;
+  cursor: pointer !important;
+}
+.horizontal-progress-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.circles-container {
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.active-page {
+  width: 24px;
+  height: 24px;
+  border: 1px solid #33475b;
+  background: #33475b;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.not-active-page {
+  width: 24px;
+  height: 24px;
+  border: 1px solid #b8cada;
+  background: #fff;
+  border-radius: 50%;
+}
+.line {
+  height: 2px;
+  width: 40%;
+  background: #b8cada;
+}
+.labels-container {
+  width: 100%;
+  font-size: 14px;
+  display: flex;
+  flex-direction: "row";
+  justify-content: space-between;
+}
+.contact-label {
+  label {
+    color: #33475b !important;
+    font-size: 15px !important;
+  }
+}
