@@ -1,3 +1,0 @@
----
-"@cloudify/hubspot-frontend": patch
----
