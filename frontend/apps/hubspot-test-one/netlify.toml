@@ -1,8 +1,0 @@
-[build]
-    command = "pnpm run build"
-    base = "/frontend/apps/hubspot-test-one"
-
-[[redirects]]
-    from = "/*"
-    to = "/index.html"
-    status = 200

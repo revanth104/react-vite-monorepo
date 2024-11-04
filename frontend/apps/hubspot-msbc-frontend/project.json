@@ -1,0 +1,14 @@
+{
+  "name": "hubspot-msbc-frontend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "targets": {
+    "deploy-to-netlify": {
+      "options": {
+        "env": {
+          "NETLIFY_SITE_ID": "745948f8-62b1-415d-a54c-9a9c1301596e"
+        }
+      }
+    }
+  },
+  "tags": ["netlify", "site"]
+}
