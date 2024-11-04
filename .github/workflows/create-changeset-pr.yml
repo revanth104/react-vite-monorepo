@@ -66,6 +66,9 @@ jobs:
           commit: "version: release new version"
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN }}
+          
+      - name: Debug Pull Request URL
+        run: echo "Pull Request URL: ${{ steps.changesets.outputs.pull_request_url }}"
 
       # Clean up empty CHANGELOG.md files
       - name: Clean up empty CHANGELOG.md files
