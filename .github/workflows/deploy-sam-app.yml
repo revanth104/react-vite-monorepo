@@ -1,0 +1,115 @@
+name: Deploy SAM application
+
+# Trigger the workflow on all pull requests and only if there are changes in serverless
+on:
+  push:
+    branches:
+      - "feature/*"
+    paths:
+      - "serverless/**"
+  workflow_call:
+
+# Environment variables getting from the github
+env:
+  AWS_REGION: ${{ vars.PM_REGION }}
+  DOMAIN_NAME: ${{ github.ref == 'refs/heads/main' && vars.PM_PRODUCTION_DOMAIN || vars.PM_STAGING_DOMAIN }}
+  ARTIFACTS_BUCKET: ${{ vars.PM_ARTIFACTS_BUCKET }}
+  DEPLOYMENT_ROLE: ${{ vars.PM_DEPLOYMENT_ROLE }}
+  NODE_ENVIRONMENT: ${{ fromJSON('["development", "production"]')[github.ref == 'refs/heads/main'] }}
+  STAGE_NAME: ${{ fromJSON('["dev", "prod"]')[github.ref == 'refs/heads/main'] }}
+  STACK: ${{ fromJSON('["staging", "production"]')[github.ref == 'refs/heads/main'] }}
+  # Head~2 for production cause the latest commit will be of changelog and we want the commit before that
+  NX_BASE: ${{ fromJSON('["HEAD~1", "HEAD~2"]')[github.ref == 'refs/heads/main'] }}
+  NX_HEAD: "HEAD"
+
+# Define permissions for Github token
+permissions:
+  id-token: write
+  actions: read
+  contents: read
+
+jobs:
+  # Job to Built affected packages
+  deploy-sam-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Enable corepack
+        run: corepack enable
+        shell: bash
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 8
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store
+
+      - name: Install Dependencies
+        run: |
+          pnpm c set recursive-install=false --location=project
+          pnpm install --no-frozen-lockfile
+
+      - name: Install Packages Dependencies
+        run: pnpm --filter "./serverless/packages/*" install --no-frozen-lockfile
+
+      # Build affected packages
+      - name: Build packages
+        run: |
+          echo "github branch: ${{ github.ref }}"
+          pnpm nx run-many -t build --exclude=*,!serverless/packages/* --verbose --output-style=static
+
+      - uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ env.DEPLOYMENT_ROLE }}
+          role-session-name: deployment
+          role-duration-seconds: 3600
+          role-skip-session-tagging: true
+
+      - name: Restore cached npm dependencies
+        id: cache-dependencies-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            node_modules
+          key: npm-dependencies-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: Cache npm dependencies
+        id: cache-dependencies
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            node_modules
+          key: ${{ steps.cache-dependencies-restore.outputs.cache-primary-key }}
+
+      - name: Deploy SAM App
+        run: |
+          pnpm nx affected -t deploy-sam --exclude=*,!serverless/functions/*/src --parallel=3 --verbose --output-style=static
+          pnpm nx affected -t deploy-sam --exclude=*,!serverless/functions/*/scheduler --parallel=3 --verbose --output-style=static

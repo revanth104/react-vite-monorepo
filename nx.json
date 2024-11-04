@@ -14,38 +14,12 @@
     "deploy-sam": {
       "executor": "nx:run-commands",
       "options": {
-        "cwd": "{projectRoot}",
         "commands": [
           {
-            "command": "pnpm c set node-linker=hoisted --location=project",
-            "forwardAllArgs": false
+            "command": "bash ./scripts/build-sam.sh {projectRoot}"
           },
           {
-            "command": "pnpm c set recursive-install=false --location=project",
-            "forwardAllArgs": false
-          },
-          {
-            "command": "pnpm c set link-workspace-packages=true --location=project",
-            "forwardAllArgs": false
-          },
-          {
-            "command": "pnpm c set save-workspace-protocol=false --location=project",
-            "forwardAllArgs": false
-          },
-          {
-            "command": "pnpm c set shared-workspace-lockfile=false --location=project",
-            "forwardAllArgs": false
-          },
-          {
-            "command": "pnpm c set save-workspace-protocol=rolling --location=project",
-            "forwardAllArgs": false
-          },
-          {
-            "command": "rm -rf node_modules && pnpm i -no-frozen-lockfile",
-            "forwardAllArgs": false
-          },
-          {
-            "command": "cd .. && sam deploy --stack-name pm-$STACK_NAME-$STACK --no-confirm-changeset --no-fail-on-empty-changeset  --s3-bucket $ARTIFACTS_BUCKET  --capabilities CAPABILITY_IAM --region $AWS_REGION --parameter-overrides StageName=$STAGE_NAME Environment=$NODE_ENVIRONMENT DomainName=$DOMAIN_NAME"
+            "command": "cd {projectRoot} && cd .. && sam deploy --stack-name pm-$STACK_NAME-$STACK --no-confirm-changeset --no-fail-on-empty-changeset  --s3-bucket $ARTIFACTS_BUCKET  --capabilities CAPABILITY_IAM --region $AWS_REGION --parameter-overrides StageName=$STAGE_NAME Environment=$NODE_ENVIRONMENT DomainName=$DOMAIN_NAME"
           }
         ],
         "color": true,

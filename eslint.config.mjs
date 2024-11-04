@@ -13,6 +13,12 @@ export default [
   ...tseslint.configs.recommended,
   ...fixupConfigRules(pluginReactConfig),
   {
+    files: ["**/*.js", "**/*.jsx"],
+    rules: {
+      "prefer-const": "error",
+    },
+  },
+  {
     plugins: {
       "react-hooks": reactHooks,
     },
