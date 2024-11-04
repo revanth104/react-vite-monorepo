@@ -67,6 +67,23 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN }}
 
+      # Clean up empty CHANGELOG.md files
+      - name: Clean up empty CHANGELOG.md files
+        if: steps.changesets.outputs.pull_request_url != ''
+        run: |
+          # Find all modified CHANGELOG.md files in the last commit
+          for file in $(git diff --name-only HEAD^ HEAD | grep 'CHANGELOG.md'); do
+            # Check if the file contains only a version header with no additional content
+            if [[ $(grep -E '^## [0-9]+\.[0-9]+\.[0-9]+$' $file | wc -l) -eq 1 && $(wc -l < $file) -eq 1 ]]; then
+              echo "Deleting $file as it only contains a version header without additional content."
+              git rm $file
+            fi
+          done
+          git commit --amend -m "version: clean up empty CHANGELOG.md files"
+          git push --force
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   upload-artifact:
     # Don't execute if the PR is from changeset-release
     if: github.event.pull_request.merged == true && !(startsWith(github.event.pull_request.head.ref, 'changeset-release/'))
