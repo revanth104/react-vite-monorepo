@@ -4,9 +4,9 @@
 import path from "path";
 
 // Name of the github account
-export const repoOwner = "cloudifybiz";
+export const repoOwner = "revanth104";
 // Name of github repository
-export const repo = "pm-apps";
+export const repo = "react-vite-monorepo";
 
 // ArtifactName of the artifact set in github action
 export const artifactName =
