@@ -10,7 +10,6 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 
-// types
 import {
   IInvoiceSlice,
   IResponseStructure,
